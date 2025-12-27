@@ -1,24 +1,42 @@
-from transformers import pipeline
+# from transformers import pipeline
 
-# Load a small chat-friendly model
-chatbot = pipeline(
-    "text-generation",
-    model="TinyLlama/TinyLlama-1.1B-Chat-v1.0",
-    device_map="auto"
-)
+# # Load a small chat-friendly model
+# chatbot = pipeline(
+#     "text-generation",
+#     model="TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+#     device_map="auto"
+# )
 
-while True:
-    user_input = input("You: ")
-    if user_input.lower() in ["exit", "quit"]:
-        break
+# while True:
+#     user_input = input("You: ")
+#     if user_input.lower() in ["exit", "quit"]:
+#         break
 
-    prompt = f"<|user|>\n{user_input}\n<|assistant|>\n"
+#     prompt = f"<|user|>\n{user_input}\n<|assistant|>\n"
 
-    response = chatbot(
-        prompt,
-        max_new_tokens=200,
-        temperature=0.7,
-        do_sample=True
+#     response = chatbot(
+#         prompt,
+#         max_new_tokens=200,
+#         temperature=0.7,
+#         do_sample=True
+#     )
+
+#     print("Bot:", response[0]["generated_text"].split("<|assistant|>")[-1].strip())
+from langchain_huggingface import ChatHuggingFace, HuggingFacePipeline
+import os
+
+os.environ['HF_HOME'] = 'D:/huggingface_cache'
+
+llm = HuggingFacePipeline.from_model_id(
+    model_id='TinyLlama/TinyLlama-1.1B-Chat-v1.0',
+    task='text-generation',
+    pipeline_kwargs=dict(
+        temperature=0.5,
+        max_new_tokens=100
     )
+)
+model = ChatHuggingFace(llm=llm)
 
-    print("Bot:", response[0]["generated_text"].split("<|assistant|>")[-1].strip())
+result = model.invoke("What is the capital of India")
+
+print(result.content)
