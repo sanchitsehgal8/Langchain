@@ -23,7 +23,7 @@ prompt3 = PromptTemplate(
 
 
 llm = HuggingFacePipeline.from_model_id(
-    model_id='TinyLlama/TinyLlama-1.1B-Chat-v1.0',
+    model_id='Qwen/Qwen3-0.6B', 
     task='text-generation',
     pipeline_kwargs=dict(
         temperature=0.5,        
